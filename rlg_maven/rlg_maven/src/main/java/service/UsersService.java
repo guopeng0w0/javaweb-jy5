@@ -16,7 +16,7 @@ public class UsersService {
         RequestCode rs = new RequestCode();
         if (username==null || username.equals("") || password==null || password.equals("") ){
             rs.setStatus(1);
-            rs.setData("账户或密码错误");
+            rs.setMsg("账户或密码错误");
             return rs;
         }
 
@@ -25,13 +25,13 @@ public class UsersService {
         //如果用户不存在
         if (u == null){
             rs.setStatus(1);
-            rs.setData("账户或密码错误");
+            rs.setMsg("账户或密码错误");
             return rs;
         }
         //如果用户存在判断是否是管理员
         if (u.getType() != 1){
             rs.setStatus(2);
-            rs.setData("没有访问权限");
+            rs.setMsg("没有访问权限");
             return rs;
         }
         rs.setStatus(0);
@@ -50,7 +50,7 @@ public class UsersService {
         }
 
         //调用数据层
-        List<Users> li = ud.selectAll(pageSize,pageNum);
+        List<Users> li = ud.selectAll(pageSize, pageNum);
 
         //创建RequestCode对象
         RequestCode rs = new RequestCode();

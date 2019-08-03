@@ -1,9 +1,9 @@
 package controller;
 
-
 import common.RequestCode;
 import pojo.Users;
-import service.UsersService;
+
+import service.ProductService;
 import utils.PathUTil;
 
 import javax.servlet.ServletException;
@@ -13,19 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
-//控制层
-@WebServlet("/manage/user/*")
-public class UsersController extends HttpServlet {
-    //往业务层传输数据
-    UsersService us = new UsersService();
-
+@WebServlet(name = "ProductController",value = "/manage/product/*")
+public class ProductController extends HttpServlet {
+    //网业务层传输数据
+    ProductService ps = new ProductService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);
     }
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //获取请求路径信息
         String pathInfo = request.getPathInfo();
         String path = PathUTil.getPath(pathInfo);
@@ -37,43 +34,55 @@ public class UsersController extends HttpServlet {
             case "list":
                 rs = listDo(request);
                 break;
-            case "login":
-                rs = loginDo(request);
+            case "set_sale_status":
+                rs = statusDo(request);
                 break;
-            case "disableuser":
-                rs = disableuserDo(request);
+            case "search":
+                rs = searchDo(request);
                 break;
         }
         //将数据传给前端
         response.getWriter().write(rs.toString());
     }
-
-    //禁用用户
-    private RequestCode disableuserDo(HttpServletRequest request) {
-        String id = request.getParameter("id");
-
-        RequestCode rs = us.selectOne(id);
-        return rs;
-    }
-
-    //用户登录
-    private RequestCode loginDo(HttpServletRequest request){
+    //产品搜索
+    private RequestCode searchDo(HttpServletRequest request) {
         //获取前端传来的数据
-        String username = request.getParameter("username");
-        String password  = request.getParameter("password");
+        String productId = request.getParameter("productId");
+        String productName  = request.getParameter("productName");
 
-        RequestCode rs = us.selectOne(username,password );
-
-        //登录时创建session对象
-        HttpSession session = request.getSession();
-        session.setAttribute("user",rs.getData());
-
-        //调用业务层处理业务
+        RequestCode rs = ps.selectAll(productId, productName);
         return rs;
     }
 
-    //获取所有用户列表的信息
-    private RequestCode listDo(HttpServletRequest request){
+    //产品上下架
+    private RequestCode statusDo(HttpServletRequest request) {
+        RequestCode rs = new RequestCode();
+
+        //获取session对象，保存是否登录成功的信息
+        HttpSession session = request.getSession();
+        Users user = (Users) session.getAttribute("user");
+
+        //判断用户是否存在,若不存在
+        if (user == null){
+            rs.setStatus(3);
+            rs.setMsg("用户未登录，请登录后操作");
+            return rs;
+        }
+        //如果用户不是管理员
+        if (user.getType() != 1){
+            rs.setStatus(4);
+            rs.setMsg("你有操作权限");
+            return rs;
+        }
+        //获取前端传来的数据
+        String productId = request.getParameter("productId");
+        String status = request.getParameter("status");
+        rs = ps.idStatus(productId,status);
+        return rs;
+    }
+
+    //获取所有商品列表的信息
+    private RequestCode listDo(HttpServletRequest request) {
         RequestCode rs = new RequestCode();
 
         //获取session对象，保存是否登录成功的信息
@@ -82,7 +91,7 @@ public class UsersController extends HttpServlet {
         //如果用户不存在
         if (user == null){
             rs.setStatus(3);
-            rs.setMsg("请登录后操作");
+            rs.setMsg("用户未登录，请登录后操作");
             return rs;
         }
         //如果用户不是管理员
@@ -94,9 +103,10 @@ public class UsersController extends HttpServlet {
         //获取前端传来的数据
         String pageSize = request.getParameter("pageSize");
         String pageNum = request.getParameter("pageNum");
-        rs = us.selectAll(pageSize,pageNum);
+        rs = ps.selectAll(pageSize,pageNum);
         //往业务层传输数据
         return rs;
-    }
 
+    }
 }
+
