@@ -1,16 +1,15 @@
 package utils;
 
-import common.RequestCode;
+import common.ResponstCode;
 import pojo.Users;
 
-import javax.persistence.Id;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "JurisDictionFilter",value = "/manger/*")
+@WebFilter(filterName = "JurisDictionFilter",value = "/manage/*")
 public class JurisDictionFilter implements Filter {
     public void destroy() {
     }
@@ -20,7 +19,7 @@ public class JurisDictionFilter implements Filter {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");
         //获取统一返回对象
-        RequestCode rs = new RequestCode();
+        ResponstCode rs = new ResponstCode();
         //向下转型，使用子类的更多方法
         HttpServletRequest request = (HttpServletRequest) req;
         //获取路径
@@ -45,12 +44,10 @@ public class JurisDictionFilter implements Filter {
             resp.getWriter().write(rs.toString());
             return;
         }
-
         chain.doFilter(req, resp);
     }
 
     public void init(FilterConfig config) throws ServletException {
 
     }
-
 }

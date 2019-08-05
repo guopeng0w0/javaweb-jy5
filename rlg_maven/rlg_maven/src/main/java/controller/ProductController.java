@@ -1,8 +1,7 @@
 package controller;
 
-import common.RequestCode;
+import common.ResponstCode;
 import pojo.Users;
-
 import service.ProductService;
 import utils.PathUTil;
 
@@ -18,6 +17,7 @@ import java.io.IOException;
 public class ProductController extends HttpServlet {
     //网业务层传输数据
     ProductService ps = new ProductService();
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);
     }
@@ -28,35 +28,90 @@ public class ProductController extends HttpServlet {
         String path = PathUTil.getPath(pathInfo);
 
         //创建统一返回对象
-        RequestCode rs = null;
-        //判断是什么样的请求
+        ResponstCode rs = new ResponstCode();      //判断是什么样的请求
         switch (path){
             case "list":
                 rs = listDo(request);
                 break;
-            case "set_sale_status":
-                rs = statusDo(request);
-                break;
             case "search":
                 rs = searchDo(request);
                 break;
+            case "set_sale_status":
+                rs = statusDo(request);
+                break;
+            case "detail":
+                rs = detailDo(request);
+                break;
+            case "save":
+                rs = saveDo(request);
+                break;
+
         }
         //将数据传给前端
         response.getWriter().write(rs.toString());
     }
+
+    //新增OR更新产品
+    private ResponstCode saveDo(HttpServletRequest request) {
+        //获取前端传来的数据
+        String detail = request.getParameter("detail");
+        String price = request.getParameter("price");
+        String stock = request.getParameter("stock");
+        String id = request.getParameter("id");
+
+        ResponstCode rs =  ps.upDateAll(detail,price,stock,id);
+        return rs;
+
+    }
+
+    //产品详情
+    private ResponstCode detailDo(HttpServletRequest request) {
+        String productId = request.getParameter("productId");
+        ResponstCode rs =  ps.selectAll(productId);
+        return rs;
+    }
+
+    //产品list
+    private ResponstCode listDo(HttpServletRequest request) {
+        ResponstCode rs = new ResponstCode();
+
+        //获取session对象，保存是否登录成功的信息
+        HttpSession session = request.getSession();
+        Users user = (Users) session.getAttribute("user");
+        //如果用户不存在
+        if (user == null){
+            rs.setStatus(3);
+            rs.setMsg("用户未登录，请登录后操作");
+            return rs;
+        }
+        //如果用户不是管理员
+        if (user.getType() != 1){
+            rs.setStatus(4);
+            rs.setMsg("你没有操作权限");
+            return rs;
+        }
+        //获取前端传来的数据
+        String pageSize = request.getParameter("pageSize");
+        String pageNum = request.getParameter("pageNum");
+        rs = ps.selectProductAll(pageSize,pageNum);
+        //往业务层传输数据
+        return rs;
+
+    }
+
     //产品搜索
-    private RequestCode searchDo(HttpServletRequest request) {
+    private ResponstCode searchDo(HttpServletRequest request) {
         //获取前端传来的数据
         String productId = request.getParameter("productId");
         String productName  = request.getParameter("productName");
 
-        RequestCode rs = ps.selectAll(productId, productName);
+        ResponstCode rs = ps.selectAll(productId, productName);
         return rs;
     }
 
     //产品上下架
-    private RequestCode statusDo(HttpServletRequest request) {
-        RequestCode rs = new RequestCode();
+    private ResponstCode statusDo(HttpServletRequest request) {
+        ResponstCode rs = new ResponstCode();
 
         //获取session对象，保存是否登录成功的信息
         HttpSession session = request.getSession();
@@ -81,32 +136,6 @@ public class ProductController extends HttpServlet {
         return rs;
     }
 
-    //获取所有商品列表的信息
-    private RequestCode listDo(HttpServletRequest request) {
-        RequestCode rs = new RequestCode();
 
-        //获取session对象，保存是否登录成功的信息
-        HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("user");
-        //如果用户不存在
-        if (user == null){
-            rs.setStatus(3);
-            rs.setMsg("用户未登录，请登录后操作");
-            return rs;
-        }
-        //如果用户不是管理员
-        if (user.getType() != 1){
-            rs.setStatus(4);
-            rs.setMsg("你没有操作权限");
-            return rs;
-        }
-        //获取前端传来的数据
-        String pageSize = request.getParameter("pageSize");
-        String pageNum = request.getParameter("pageNum");
-        rs = ps.selectAll(pageSize,pageNum);
-        //往业务层传输数据
-        return rs;
 
-    }
 }
-

@@ -36,7 +36,6 @@ import java.util.List;
             return li;
         }
 
-
         //根据id查找u用户
         public Users selectOne(Integer id) {
             QueryRunner q = new QueryRunner(PoolUTil.getCom());

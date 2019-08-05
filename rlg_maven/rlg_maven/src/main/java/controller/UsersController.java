@@ -1,7 +1,6 @@
 package controller;
 
-
-import common.RequestCode;
+import common.ResponstCode;
 import pojo.Users;
 import service.UsersService;
 import utils.PathUTil;
@@ -13,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 //控制层
-@WebServlet("/manage/user/*")
+@WebServlet(name = "UserController",value = "/manage/user/*")
 public class UsersController extends HttpServlet {
     //往业务层传输数据
     UsersService us = new UsersService();
@@ -31,7 +29,7 @@ public class UsersController extends HttpServlet {
         String path = PathUTil.getPath(pathInfo);
 
         //创建统一返回对象
-        RequestCode rs = null;
+        ResponstCode rs = null;
         //判断是什么样的请求
         switch (path){
             case "list":
@@ -49,20 +47,20 @@ public class UsersController extends HttpServlet {
     }
 
     //禁用用户
-    private RequestCode disableuserDo(HttpServletRequest request) {
+    private ResponstCode disableuserDo(HttpServletRequest request) {
         String id = request.getParameter("id");
 
-        RequestCode rs = us.selectOne(id);
+        ResponstCode rs = us.selectOne(id);
         return rs;
     }
 
     //用户登录
-    private RequestCode loginDo(HttpServletRequest request){
+    private ResponstCode loginDo(HttpServletRequest request){
         //获取前端传来的数据
         String username = request.getParameter("username");
         String password  = request.getParameter("password");
 
-        RequestCode rs = us.selectOne(username,password );
+        ResponstCode rs = us.selectOne(username,password );
 
         //登录时创建session对象
         HttpSession session = request.getSession();
@@ -73,8 +71,8 @@ public class UsersController extends HttpServlet {
     }
 
     //获取所有用户列表的信息
-    private RequestCode listDo(HttpServletRequest request){
-        RequestCode rs = new RequestCode();
+    private ResponstCode listDo(HttpServletRequest request){
+        ResponstCode rs = new ResponstCode();
 
         //获取session对象，保存是否登录成功的信息
         HttpSession session = request.getSession();

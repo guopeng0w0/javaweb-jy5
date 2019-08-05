@@ -1,7 +1,7 @@
 package service;
 
 import common.Const;
-import common.RequestCode;
+import common.ResponstCode;
 import dao.UserDao;
 import pojo.Users;
 
@@ -11,9 +11,9 @@ public class UsersService {
     UserDao ud = new UserDao();
 
     //用户登录
-    public RequestCode selectOne(String username, String password) {
+    public ResponstCode selectOne(String username, String password) {
         //判断登录是否成功
-        RequestCode rs = new RequestCode();
+        ResponstCode rs = new ResponstCode();
         if (username==null || username.equals("") || password==null || password.equals("") ){
             rs.setStatus(1);
             rs.setMsg("账户或密码错误");
@@ -40,7 +40,7 @@ public class UsersService {
     }
 
     //获取所有用户列表的信息
-    public RequestCode selectAll(String pageSize, String pageNum) {
+    public ResponstCode selectAll(String pageSize, String pageNum) {
         //对传进的数据进行非空判断
         if (pageSize==null || pageSize.equals("")){
             pageSize="10";
@@ -53,7 +53,7 @@ public class UsersService {
         List<Users> li = ud.selectAll(pageSize, pageNum);
 
         //创建RequestCode对象
-        RequestCode rs = new RequestCode();
+        ResponstCode rs = new ResponstCode();
         rs.setStatus(0);
         //将集合中元素添加到RequestCode对象中
         rs.setData(li);
@@ -61,15 +61,14 @@ public class UsersService {
     }
 
     //禁用用户
-    public RequestCode selectOne(String uids) {
+    public ResponstCode selectOne(String uids) {
         //判断为空
-        RequestCode rs = new RequestCode();
+        ResponstCode rs = new ResponstCode();
         if (uids == null || uids.equals("") ){
             rs.setStatus(Const.USER_PARAMETER_CODE);
             rs.setMsg(Const.USER_PARAMETER_MSG);
             return rs;
         }
-
         //将字符串转成数值
         Integer id = null;
         try {
@@ -79,7 +78,6 @@ public class UsersService {
             rs.setMsg("输入非法参数");
             return rs;
         }
-
         //查找是否有这样一个用户，去数据层查找)
         Users u = ud.selectOne(id);
         //如果用户不存在
