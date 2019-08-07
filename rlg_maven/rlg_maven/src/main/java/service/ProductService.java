@@ -86,9 +86,10 @@ public class ProductService {
     public ResponstCode upDateAll( String id,String detail, String price, String stock) {
         ResponstCode rs = new ResponstCode();
         if (id == null || id.equals("")){
-
+            //执行新增商品的方法
+           rs =  pd.insertProduc(Integer.parseInt(id),detail,price,Integer.parseInt(stock));
         }
-        return null;
+        return rs;
     }
 }
 

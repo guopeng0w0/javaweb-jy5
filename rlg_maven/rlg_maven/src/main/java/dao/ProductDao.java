@@ -1,5 +1,6 @@
 package dao;
 
+import common.ResponstCode;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -63,7 +64,7 @@ public class ProductDao {
         return row;
     }
 
-
+    //产品详情
     public list selectProductAll(Integer productId) {
         //连接数据库，查询数据
         QueryRunner q = new QueryRunner(PoolUTil.getCom());
@@ -75,6 +76,15 @@ public class ProductDao {
             e.printStackTrace();
         }
         return li;
+    }
+
+    //新增or更新产品
+    public ResponstCode insertProduc(Integer id, String detail, String price, Integer stock) {
+        //连接数据库，查询数据
+        QueryRunner q = new QueryRunner(PoolUTil.getCom());
+        String sql = "insert into product values(null,)";
+return null;
+
     }
 }
 
