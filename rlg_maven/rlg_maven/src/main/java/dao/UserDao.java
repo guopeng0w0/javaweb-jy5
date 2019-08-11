@@ -62,4 +62,17 @@ import java.util.List;
             }
             return row;
         }
+
+        //验证用户信息
+        public Users yanZheng(String usf, String pas) {
+            QueryRunner q = new QueryRunner(PoolUTil.getCom());
+            String sql = "select * from users where uid = ? and upsw = ?";
+            Users u = null;
+            try {
+                u = q.query(sql, new BeanHandler<Users>(Users.class),usf,pas);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return u;
+        }
     }

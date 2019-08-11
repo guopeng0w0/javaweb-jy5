@@ -34,10 +34,10 @@ public class OrderController extends HttpServlet {
             case "search":
                 rs = searchDo(request);
                 break;
-                //订单详情
-//            case "detail":
-//                rs = detailDo(request);
-//                break;
+               //订单详情
+            case "detail":
+                rs = detailDo(request);
+                break;
                 //订单发货
             case "send_goods":
                 rs = sendDo(request);
@@ -48,7 +48,6 @@ public class OrderController extends HttpServlet {
 
     //订单list
     private ResponstCode listDo(HttpServletRequest request) {
-
         String pageSize = request.getParameter("pageSize");
         String pageNum = request.getParameter("pageNum");
         ResponstCode rs = os.selectOrderAll(pageSize,pageNum);
@@ -59,19 +58,21 @@ public class OrderController extends HttpServlet {
     //订单详情按订单号查询
     private ResponstCode searchDo(HttpServletRequest request) {
         String orderNo = request.getParameter("orderNo");
+        ResponstCode rs = os.selectId(orderNo);
+        return rs;
+    }
+
+    //订单详情
+    private ResponstCode detailDo(HttpServletRequest request) {
+        String orderNo = request.getParameter("orderNo");
         ResponstCode rs = os.selectOrderAll(orderNo);
         return rs;
     }
 
+    //订单发货
     private ResponstCode sendDo(HttpServletRequest request) {
-        return null;
+        String orderNo = request.getParameter("orderNo");
+        ResponstCode rs = os.sendGoods(orderNo);
+        return rs;
     }
-
-    //
-//    private ResponstCode detailDo(HttpServletRequest request) {
-//        String orderNo = request.getParameter("orderNo");
-//        ResponstCode rs = os.selectIdAll(orderNo);
-//        return rs;
-//    }
-
 }

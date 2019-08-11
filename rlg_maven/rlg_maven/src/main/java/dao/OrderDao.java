@@ -1,5 +1,6 @@
 package dao;
 
+import common.ResponstCode;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -21,6 +22,7 @@ public class OrderDao {
         }
         return li;
     }
+
     //按订单号查询
     public Order selecOrdertAll(Integer ordorNo) {
         QueryRunner q = new QueryRunner(PoolUTil.getCom());
@@ -33,15 +35,29 @@ public class OrderDao {
         return order;
     }
 
-//    public Order selectIdAll(Integer orderNo) {
-//        QueryRunner q = new QueryRunner(PoolUTil.getCom());
-//        Order order = null;
-//        String sql = "select * from orders where orderNo = ? and payment = ?";
-//        try {
-//            order = q.query(sql, new BeanHandler<Order>(Order.class),orderNo);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return order;
-//    }
+    //订单详情
+    public Order selectIdAll(Integer orderNo) {
+        QueryRunner q = new QueryRunner(PoolUTil.getCom());
+        Order order = null;
+        String sql = "select * from orders where orderNo = ? and payment = ?";
+        try {
+            order = q.query(sql, new BeanHandler<Order>(Order.class),orderNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return order;
+    }
+
+    //订单发货
+    public Order sendGoods(Integer orderNo ) {
+        QueryRunner q = new QueryRunner(PoolUTil.getCom());
+        Order order = null;
+        String sql = "select status from orders where orderNo = ?";
+        try {
+            order = q.query(sql, new BeanHandler<Order>(Order.class),orderNo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return order;
+    }
 }

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>用户列表</title>
+		<link rel="stylesheet" type="text/css" href="css/base.css"/>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="css/userlist.css"/>
+		<script src="js/jquery-3.3.1.js"></script>
+	</head>
+	<body>
+		<div id="continer">
+			<!-- 左侧内容 -->
+			
+			<div id="left">
+				<div class="left-left">
+					 <h3>睿乐购后台管理系统</h3>
+				</div>
+		
+				<div class="left-left">
+					<img src="img/用户.png"  class="a">
+					用户模块
+					<img src="img/下拉图标.png" class="b">
+				</div>
+				<ul id="one">
+					<li>
+						<a href="userlist.html">用户列表</a>
+					</li>
+					<li>
+						<a href="">管理员登录</a>
+					</li>
+					<li>
+						<a href="">禁用用户</a>
+					</li>
+				</ul>
+				
+				
+				<div class="left-left">
+					<img src="img/商品.png" class="a">
+					商品模块
+					<img src="img/下拉图标.png" class="b">
+				</div>
+				<ul>
+					<li>
+						<a href="">产品列表</a>
+					</li>
+					<li>
+						<a href="">产品搜索</a>
+					</li>
+					<li>
+						<a href="">产品详情</a>
+					</li>
+					<li>
+						<a href="">产品上下架</a>
+					</li>
+					<li>
+						<a href="">新增OR更新产品</a>
+					</li>
+				</ul>
+				
+				<div class="left-left">
+					<img src="img/订单.png" class="a">
+					订单模块
+					<img src="img/下拉图标.png" class="b">
+				</div>
+				<ul>
+					<li>
+						<a href="">订单列表</a>
+					</li>
+					<li>
+						<a href="">订单查询</a>
+					</li>
+					<li>
+						<a href="">订单详情</a>
+					</li>
+					<li>
+						<a href="">订单发货</a>
+					</li>
+				</ul>
+				
+				<div class="left-left">
+					<img src="img/分类.png" class="a">
+					分类模块
+					<img src="img/下拉图标.png" class="b">
+				</div>
+				<ul>
+					<li>
+						<a href="">获取品类子节点</a>
+					</li>
+					<li>
+						<a href="">增加节点</a>
+					</li>
+					<li>
+						<a href="">修改品类名字</a>
+					</li>
+				</ul>
+				
+				<div class="left-left">
+					<img src="img/管理.png" class="a">
+					管理模块
+					<img src="img/下拉图标.png" class="b">
+				</div>
+				<ul>
+					<li>
+						<a href="">获取管理员列表</a>
+					</li>
+				</ul>
+			</div>
+			
+			
+			<!-- 右侧内容 -->
+			<div id="right">
+				<!-- 右侧上部内容 -->
+				<div id="right-top">
+					<div id="rt-a">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+					<div id="rt-b">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+				</div>
+				
+				 <!-- 右侧下面内容 -->
+				 <div id="right-bottom">
+					 <div id="rb-top">
+						 <input type="text" placeholder="请输入商品名称">
+						 <input type="button" value="搜索">
+					 </div>
+					 <table id="tab">
+						 <tr>
+							 <th>编号</th>
+							 <th>名称</th>
+							 <th>密码</th>
+							 <th>电话</th>
+							 <th>状态</th>
+							 <th>禁用</th>
+
+						 </tr>
+					 </table>
+				 </div>
+			</div>
+			
+		</div>
+		
+	</body>
+	
+	<script>
+			$(".left-left").click(
+				function(){
+					$(this).next().slideToggle();
+				}
+			);
+	</script>
+	<script>
+        $(function(){
+            $.get(
+                "/manage/user/list.do",
+                function (dt) {
+                    if (dt.start !== 0){
+                        alert(dt.msg);
+                    } else {
+                        for (var i = 0; i <dt.data.length ; i++) {
+                            var s = "<tr>" +
+                                "<td>" + dt.data[i].uid + "</td>" +
+                                "<td>" + dt.data[i].uname + "</td>" +
+                                "<td>" + dt.data[i].upsw + "</td>" +
+                                "<td>" + dt.data[i].phone + "</td>" +
+                                "<td>" +
+								"<a href=''>禁用</a>" +
+								"<a href=''>编辑</a>" +
+								"</td>" +
+                                "</tr>"
+                            ${"#tab"}.append(s);
+                        }
+                    }
+                }
+            )
+        })
+
+	</script>
+	
+</html>

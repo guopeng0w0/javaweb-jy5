@@ -1,0 +1,94 @@
+#continer{
+	width: 100%;
+	height: 100%;
+}
+
+#left{
+	width: 14%;
+	height: 100%;
+	background-color: #03152A;
+	float: left;
+	position: fixed;
+}
+h3{
+	padding-left: 20px;
+	text-align: center;
+	font-size: 25px;
+	color: #B4B9C0;
+}
+.left-left{
+	height: 70px;
+	background-color: #03152A;
+	border-bottom: 1px solid steelblue;
+	display: flex;
+	align-items: center;
+}
+.left-left + ul{
+	display: none;
+}
+a{
+	color: #B4B9C0;
+}
+.a{
+	padding:0px 20px;
+}
+.b{
+	padding-left: 80px;
+}
+ul{
+	padding-left: 60px;
+	background-color: #020F1D;
+}
+ul li{
+	padding:15px 0px;
+}
+
+#right{
+	width: 86%;
+	height: 900px;
+	background-color: skyblue;
+	float: left;
+	margin-left: 14%;
+}
+#right-top{
+	height: 70px;
+	width: 85.9%;
+	background-color: lightblue;
+	border: 1px solid gray;
+	display: flex;
+	justify-content: space-between;
+	position: fixed;
+}
+#rt-a,#rt-b{
+	display: flex;
+}
+#rt-a{
+	width: 40%;
+	}
+#rt-b{
+	width: 40%;
+	display: flex;
+	justify-content: flex-end;
+}
+#rt-a div{
+	height: 50px;
+	width: 50px;
+	background-color: white;
+	margin-left: 40px;
+	margin-top: 10px;
+}
+#rt-b div{
+	height: 50px;
+	width: 50px;
+	background-color: white;
+	margin-right: 40px;
+	margin-top: 10px;
+}
+
+/* 下面内容 */
+#right-bottom{
+	height: 700px;
+	width: 1000px;
+	background-color: white;
+	margin: 140px 0px 0px 43px;
+}

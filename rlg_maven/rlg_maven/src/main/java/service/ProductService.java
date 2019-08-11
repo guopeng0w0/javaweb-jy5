@@ -47,29 +47,6 @@ public class ProductService {
        return rs;
     }
 
-    //商品上下架
-    public ResponstCode idStatus(String productId, String status) {
-        ResponstCode rs = new ResponstCode();
-        //对传进的数据进行非空判断
-//        if (productId==null || productId.equals("")){
-//            productId="10";
-//        }
-//        if (status==null || status.equals("")){
-//            status="1";
-//        }
-
-        //根据商品id，和status管理
-        int row = pd.updateByUid(Integer.parseInt(productId), Integer.parseInt(status));
-        if (row > 0){
-            rs.setStatus(0);
-            rs.setMsg("修改产品状成功");
-            return rs;
-        }
-        rs.setStatus(1);
-        rs.setMsg("修改产品状态失败");
-        return rs;
-    }
-
     //产品详情
     public ResponstCode selectAll(String productId) {
         ResponstCode rs= new ResponstCode();
@@ -79,6 +56,22 @@ public class ProductService {
         }
         list li = pd.selectProductAll(Integer.parseInt(productId));
         rs.setData(li);
+        return rs;
+    }
+
+    //商品上下架
+    public ResponstCode idStatus(String productId, String status) {
+        ResponstCode rs = new ResponstCode();
+
+        //根据商品id，和状态码管理产品上下架
+        int row = pd.updateByUid(Integer.parseInt(productId), Integer.parseInt(status));
+        if (row > 0){
+            rs.setStatus(0);
+            rs.setMsg("修改产品状态成功");
+            return rs;
+        }
+        rs.setStatus(1);
+        rs.setMsg("修改产品状态失败");
         return rs;
     }
 

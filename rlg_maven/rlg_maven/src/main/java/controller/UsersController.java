@@ -44,9 +44,25 @@ public class UsersController extends HttpServlet {
             case "disableuser":
                 rs = disableuserDo(request);
                 break;
+                //验证用户信息
+            case "yanzheng":
+                yanZhengDo(request,response);
+                break;
         }
-        //将数据传给前端
-        //response.getWriter().write(rs.toString());
+    }
+
+    //用户验证
+    private void yanZhengDo(HttpServletRequest request,HttpServletResponse response) {
+        String usf = request.getParameter("usf");
+        String pas = request.getParameter("pas");
+
+        Boolean bol= us.yanZhengSelect(usf,pas);
+        try {
+            response.getWriter().write(bol+"");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     //用户登录
@@ -55,7 +71,7 @@ public class UsersController extends HttpServlet {
         String username = request.getParameter("username");
         String password  = request.getParameter("password");
 
-        ResponstCode rs = us.selectOne(username,password );
+        ResponstCode rs = us.selectOne(username,password);
 
         //登录时创建session对象
         HttpSession session = request.getSession();
@@ -63,7 +79,7 @@ public class UsersController extends HttpServlet {
 
         //调用业务层处理业务
         try {
-            request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request,response);
+            request.getRequestDispatcher("/index.html").forward(request,response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -74,26 +90,15 @@ public class UsersController extends HttpServlet {
     //获取所有用户列表的信息
     private void listDo(HttpServletRequest request,HttpServletResponse response) {
         ResponstCode rs = new ResponstCode();
-/*
-        //获取session对象，保存是否登录成功的信息
+
         HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("user");
-        //如果用户不存在
-        if (user == null){
-            rs.setStatus(3);
-            rs.setMsg("请登录后操作");
-            return rs;
-        }
-        //如果用户不是管理员
-        if (user.getType() != 1){
-            rs.setStatus(4);
-            rs.setMsg("你没有操作权限");
-            return rs;
-        }*/
+        session.setAttribute("user",rs.getData());
+
         //获取前端传来的数据
         String pageSize = request.getParameter("pageSize");
         String pageNum = request.getParameter("pageNum");
         rs = us.selectAll(pageSize, pageNum);
+
         //往业务层传输数据
         request.setAttribute("userlist", rs);
         try {

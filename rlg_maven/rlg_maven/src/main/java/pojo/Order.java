@@ -8,7 +8,7 @@ public class Order {
     private Integer paymentType;
     private String paymentTypeDesc;
     private String postage;
-    private String status;
+    private String status;//'订单状态：0-已取消 10-未付款 20-已付款 40-已发货 50-未发货 50-交易关闭' '60-交易成功',
     private String statusDesc;
     private Date paymentTime;
     private Date endTime;

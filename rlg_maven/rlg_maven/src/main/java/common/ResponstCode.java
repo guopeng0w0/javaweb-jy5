@@ -31,7 +31,7 @@ public class ResponstCode<T> {
 
     @Override
     public String toString() {
-        return "ResponstCode{" +
+        return "{" +
                 "status=" + status +
                 ", data=" + data +
                 ", msg='" + msg + '\'' +

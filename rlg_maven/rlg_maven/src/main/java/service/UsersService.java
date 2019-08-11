@@ -103,4 +103,14 @@ public class UsersService {
         rs.setData(row);
         return rs;
     }
+
+    //验证用户信息
+    public Boolean yanZhengSelect(String usf, String pas) {
+        Users u = ud.yanZheng(usf, pas);
+        if (u == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

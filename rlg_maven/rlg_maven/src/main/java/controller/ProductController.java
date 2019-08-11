@@ -51,26 +51,6 @@ public class ProductController extends HttpServlet {
         response.getWriter().write(rs.toString());
     }
 
-    //新增OR更新产品
-    private ResponstCode saveDo(HttpServletRequest request) {
-        //获取前端传来的数据
-        String detail = request.getParameter("detail");
-        String price = request.getParameter("price");
-        String stock = request.getParameter("stock");
-        String id = request.getParameter("id");
-
-        ResponstCode rs =  ps.upDateAll(detail,price,stock,id);
-        return rs;
-
-    }
-
-    //产品详情
-    private ResponstCode detailDo(HttpServletRequest request) {
-        String productId = request.getParameter("productId");
-        ResponstCode rs =  ps.selectAll(productId);
-        return rs;
-    }
-
     //产品list
     private ResponstCode listDo(HttpServletRequest request) {
         ResponstCode rs = new ResponstCode();
@@ -109,31 +89,35 @@ public class ProductController extends HttpServlet {
         return rs;
     }
 
+    //产品详情
+    private ResponstCode detailDo(HttpServletRequest request) {
+        String productId = request.getParameter("productId");
+        ResponstCode rs =  ps.selectAll(productId);
+        return rs;
+    }
+
     //产品上下架
     private ResponstCode statusDo(HttpServletRequest request) {
         ResponstCode rs = new ResponstCode();
 
-        //获取session对象，保存是否登录成功的信息
-        HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("user");
-
-        //判断用户是否存在,若不存在
-        if (user == null){
-            rs.setStatus(3);
-            rs.setMsg("用户未登录，请登录后操作");
-            return rs;
-        }
-        //如果用户不是管理员
-        if (user.getType() != 1){
-            rs.setStatus(4);
-            rs.setMsg("你有操作权限");
-            return rs;
-        }
         //获取前端传来的数据
         String productId = request.getParameter("productId");
         String status = request.getParameter("status");
         rs = ps.idStatus(productId,status);
         return rs;
+    }
+
+    //新增OR更新产品
+    private ResponstCode saveDo(HttpServletRequest request) {
+        //获取前端传来的数据
+        String detail = request.getParameter("detail");
+        String price = request.getParameter("price");
+        String stock = request.getParameter("stock");
+        String id = request.getParameter("id");
+
+        ResponstCode rs =  ps.upDateAll(detail,price,stock,id);
+        return rs;
+
     }
 
 }
